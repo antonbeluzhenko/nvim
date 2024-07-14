@@ -112,5 +112,11 @@ return {
         },
       },
     })
+
+    --configure arduino language server
+    lspconfig["arduino_language_server"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
   end,
 }
