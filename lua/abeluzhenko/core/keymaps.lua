@@ -1,6 +1,12 @@
 -- set leader key to space
 vim.g.mapleader = " "
 
+vim.cmd([[
+  cnoreabbrev dvo DiffviewOpen
+  cnoreabbrev dvh DiffviewFileHistory 
+  cnoreabbrev gs Gitsigns
+]])
+
 local keymap = vim.keymap -- for conciseness
 
 ---------------------
@@ -10,8 +16,8 @@ local keymap = vim.keymap -- for conciseness
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
 -- disable continuations
-keymap.set("n", "o", "o<Esc>^Da", { desc = "Insert line below" })
-keymap.set("n", "O", "O<Esc>^Da", { desc = "Insert line above" })
+keymap.set("n", "o", "o<ESC>^Da", { desc = "Insert line below" })
+keymap.set("n", "O", "O<ESC>^Da", { desc = "Insert line above" })
 
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
@@ -34,13 +40,3 @@ keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" 
 keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
-
-keymap.set("n", "<leader>fb", ":Telescope file_browser<CR>", { noremap = true, desc = "Open file browser" })
-
--- open file_browser with the path of the current buffer
-keymap.set(
-  "n",
-  "<leader>fb",
-  ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-  { noremap = true, desc = "Open file browser" }
-)
