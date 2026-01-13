@@ -7,19 +7,28 @@ return {
 
     conform.setup({
       formatters_by_ft = {
-        javascript = { "prettier" },
-        typescript = { "prettier" },
-        javascriptreact = { "prettier" },
-        typescriptreact = { "prettier" },
-        svelte = { "prettier" },
-        css = { "prettier" },
-        html = { "prettier" },
-        json = { "prettier" },
-        yaml = { "prettier" },
-        markdown = { "prettier" },
-        graphql = { "prettier" },
+        javascript = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        typescript = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        javascriptreact = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        typescriptreact = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        svelte = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        css = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        html = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        json = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        yaml = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        markdown = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
+        graphql = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
         lua = { "stylua" },
         python = { "isort", "black" },
+      },
+      formatters = {
+        oxfmt = {
+          command = "oxfmt",
+          args = { "$FILENAME" },
+          stdin = false,
+          -- When stdin=false, use this template to generate the temporary file that gets formatted
+          tmpfile_format = ".conform.$RANDOM.$FILENAME",
+        },
       },
       format_on_save = {
         lsp_fallback = true,
