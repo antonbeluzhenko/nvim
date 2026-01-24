@@ -5,6 +5,7 @@ return {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-tree/nvim-web-devicons",
+    "ray-x/telescope-ast-grep.nvim",
   },
   config = function()
     local telescope = require("telescope")
@@ -52,6 +53,8 @@ return {
     })
 
     telescope.load_extension("fzf")
+    telescope.load_extension("ast_grep")
+    telescope.load_extension("dumb_jump")
 
     -- set keymaps
     local keymap = vim.keymap -- for conciseness
@@ -62,5 +65,7 @@ return {
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<leader>fh", "<cmd>Telescope search_history<cr>", { desc = "Search history" })
     keymap.set("n", "<leader>fp", "<cmd>Telescope resume<cr>", { desc = "Resume previous search" })
+    keymap.set("n", "<leader>fa", "<cmd>Telescope AST_grep<cr>", { desc = "AST-based grep" })
+    keymap.set("n", "<leader>fj", "<cmd>Telescope dumb_jump<cr>", { desc = "Jump to definition" })
   end,
 }
