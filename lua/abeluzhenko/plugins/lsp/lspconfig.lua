@@ -7,9 +7,6 @@ return {
     "williamboman/mason.nvim",
   },
   config = function()
-    -- import lspconfig plugin
-    local lspconfig = require("lspconfig")
-
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -71,13 +68,13 @@ return {
     end
 
     -- configure html server
-    lspconfig["html"].setup({
+    vim.lsp.config("html", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure typescript server with plugin
-    lspconfig["ts_ls"].setup({
+    vim.lsp.config("ts_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       init_options = {
@@ -86,20 +83,20 @@ return {
     })
 
     -- configure css server
-    lspconfig["cssls"].setup({
+    vim.lsp.config("cssls", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
+    vim.lsp.config("emmet_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less" },
     })
 
     -- configure lua server (with special settings)
-    lspconfig["lua_ls"].setup({
+    vim.lsp.config("lua_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = { -- custom settings for lua
@@ -120,7 +117,7 @@ return {
     })
 
     --configure arduino language server
-    lspconfig["arduino_language_server"].setup({
+    vim.lsp.config("arduino_language_server", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
