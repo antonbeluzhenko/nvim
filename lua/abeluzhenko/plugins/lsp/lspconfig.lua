@@ -121,5 +121,15 @@ return {
       capabilities = capabilities,
       on_attach = on_attach,
     })
+
+    -- Enable all configured LSP servers
+    vim.lsp.enable({
+      "html",
+      "ts_ls",
+      "cssls",
+      "emmet_ls",
+      "lua_ls",
+      "arduino_language_server",
+    })
   end,
 }
