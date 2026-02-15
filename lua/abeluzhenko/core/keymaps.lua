@@ -3,8 +3,11 @@ vim.g.mapleader = " "
 
 vim.cmd([[
   cnoreabbrev dvo DiffviewOpen
-  cnoreabbrev dvh DiffviewFileHistory 
+  cnoreabbrev dvh DiffviewFileHistory
   cnoreabbrev gs Gitsigns
+  cnoreabbrev cp CopyPath
+  cnoreabbrev crp CopyRepoPath
+  cnoreabbrev cgp CopyGithubPath
 ]])
 
 local keymap = vim.keymap -- for conciseness
