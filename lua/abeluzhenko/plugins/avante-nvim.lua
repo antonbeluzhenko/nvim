@@ -12,11 +12,24 @@ return {
     -- add any opts here
     -- this file can contain specific instructions for your project
     instructions_file = "avante.md",
-    -- for example
-    provider = "claude",
+    -- Use OpenAI provider (reads OPENAI_API_KEY from environment)
+    provider = "openai",
+    -- Configure behaviour
+    behaviour = {
+      support_paste_from_clipboard = true,
+    },
+    -- Use telescope for file selection
+    file_selector = {
+      provider = "telescope",
+    },
     providers = {
+      openai = {
+        -- Will read OPENAI_API_KEY from environment variable
+        model = "gpt-5.3-codex",
+      },
       claude = {
-        auth_type = "max",
+        auth_type = "env",
+        api_key_name = "ANTHROPIC_API_KEY",
       },
       moonshot = {
         endpoint = "https://api.moonshot.ai/v1",
@@ -37,8 +50,7 @@ return {
     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "ibhagwan/fzf-lua", -- for file_selector provider fzf
-    "stevearc/dressing.nvim", -- for input provider dressing
-    "folke/snacks.nvim", -- for input provider snacks
+    -- "folke/snacks.nvim", -- REMOVED: causes conflicts with vim.ui.select
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
     "zbirenbaum/copilot.lua", -- for providers='copilot'
     {
