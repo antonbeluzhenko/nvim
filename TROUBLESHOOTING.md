@@ -28,10 +28,32 @@ This opens the lazy.nvim UI showing all plugins, their status, and any errors.
 ### Check LSP Attachment
 
 ```vim
-:LspInfo
+:checkhealth vim.lsp
 ```
 
-Shows which LSP servers are attached to the current buffer and their status.
+Shows which LSP servers are attached to which buffers, plus their root dirs and
+capabilities. Note that current nvim-lspconfig no longer ships `:LspInfo`,
+`:LspLog`, or `:LspRestart` — servers are started by `vim.lsp.enable()` in
+`lua/abeluzhenko/plugins/lsp/lspconfig.lua`, and the health check replaces them.
+
+Quick client list for the current buffer:
+
+```vim
+:lua =vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients({ bufnr = 0 }))
+```
+
+### Mason Fails to Install isort / black / pylint
+
+```
+Failed to find a python3 installation in PATH that meets the required
+versions (>=3.10.0). Found version: 3.9.6.
+```
+
+Mason builds the Python tools in a venv and rejects the macOS system Python
+(3.9). Install a newer interpreter (`brew install python@3.12`) and confirm
+`python3 --version` reports 3.10+ in the shell that launches Neovim, then run
+`:MasonToolsUpdate`. Until then mason-tool-installer retries — and logs this
+error to `~/.local/state/nvim/mason.log` — on every startup.
 
 ### Verify LSP Server Installation
 
@@ -39,27 +61,32 @@ Shows which LSP servers are attached to the current buffer and their status.
 :Mason
 ```
 
-Opens Mason UI to check installed LSP servers and tools.
-
-### LSP Health Check
-
-```vim
-:checkhealth lsp
-```
-
-Runs diagnostics on LSP configuration and identifies issues.
+Opens Mason UI to check installed LSP servers and tools. Remember the servers
+come from two lists in `plugins/lsp/mason.lua` (mason-lspconfig for servers,
+mason-tool-installer for tools including `tsgo`). `:MasonToolsUpdate` re-runs
+the tool list.
 
 ### Restart LSP Server
 
+Use the `<leader>rs` keymap — it stops the buffer's clients and re-edits the
+file so the enabled servers re-attach. Equivalent manually:
+
 ```vim
-:LspRestart
+:lua for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do c:stop(true) end
+:edit
 ```
 
 ### View LSP Logs
 
 ```vim
-:LspLog
+:lua vim.cmd.tabnew(vim.lsp.get_log_path())
 ```
+
+### TypeScript Server Not Starting
+
+JS/TS is served by `tsgo`, which `lspconfig.lua` launches as
+`tsgo --lsp --stdio` off `PATH`. If it never attaches, confirm the binary
+resolves (`:echo exepath("tsgo")`) and reinstall with `:MasonInstall tsgo`.
 
 ## Formatting Issues
 
@@ -74,10 +101,19 @@ Shows available formatters for the current buffer and their status.
 ### Manual Format
 
 ```vim
-:lua vim.lsp.buf.format()
+:lua require("conform").format()
 ```
 
-Or use the keymap: `<leader>mp` (format current buffer)
+Or use the keymap: `<leader>mp` (format current buffer, or the selection in
+visual mode).
+
+### Wrong Formatter Runs
+
+Web filetypes use a `stop_after_first` chain: `oxfmt`, then `prettierd`, then
+`prettier`. Whichever is found first on `PATH` wins, so a missing `oxfmt`
+silently falls through to prettier. `:ConformInfo` shows which are available.
+Formatting also falls back to the LSP (`lsp_fallback = true`) when no configured
+formatter is available.
 
 ## Treesitter Issues
 
@@ -140,6 +176,10 @@ Then review `startup.log` to see what takes time.
 
 ## Copilot Issues
 
+> Inline (ghost text) suggestions and the Copilot panel are **disabled by
+> design** in `plugins/copilot.lua`. Copilot shows up as a nvim-cmp completion
+> source via copilot-cmp — missing ghost text is not a bug.
+
 ### Check Copilot Status
 
 ```vim
@@ -200,5 +240,11 @@ Ensure you're running Neovim 0.11+ (required by nvim-treesitter's `main` branch)
 ### Auto-completion Not Working
 
 1. Check nvim-cmp is loaded: `:Lazy`
-2. Verify LSP is attached: `:LspInfo`
+2. Verify LSP is attached: `:checkhealth vim.lsp`
 3. Check Copilot status: `:Copilot status`
+4. For missing Copilot entries specifically, confirm a `copilot` client is
+   running — copilot-cmp only registers its source on `InsertEnter`/`LspAttach`
+   once copilot.lua has attached:
+   ```vim
+   :lua =#vim.lsp.get_clients({ name = "copilot" })
+   ```

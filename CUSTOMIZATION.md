@@ -49,10 +49,18 @@ opt.expandtab = true           -- Use spaces instead of tabs
 
 ## Adding LSP Language Support
 
-1. Add the LSP server to `lua/abeluzhenko/plugins/lsp/mason.lua` around line 30:
+`lua/abeluzhenko/plugins/lsp/mason.lua` has **two** `ensure_installed` lists —
+pick the right one:
+
+- `mason_lspconfig.setup()` (line ~30) takes **lspconfig server names** and is
+  where most servers go.
+- `mason_tool_installer.setup()` (line ~42) takes **Mason package names** and
+  is where formatters, linters, and any server mason-lspconfig has no mapping
+  for (e.g. `tsgo`) go.
+
+1. Add the server to the appropriate list:
    ```lua
    ensure_installed = {
-     "ts_ls",
      "html",
      "cssls",
      "lua_ls",
@@ -60,13 +68,28 @@ opt.expandtab = true           -- Use spaces instead of tabs
    }
    ```
 
-2. Configure the server in `lua/abeluzhenko/plugins/lsp/lspconfig.lua`:
+2. Configure and enable the server in
+   `lua/abeluzhenko/plugins/lsp/lspconfig.lua` using the Neovim 0.11 API:
    ```lua
-   lspconfig["your_new_server"].setup({
+   vim.lsp.config("your_new_server", {
      capabilities = capabilities,
      on_attach = on_attach,
    })
    ```
+
+   Then add its name to the single `vim.lsp.enable({...})` call at the bottom
+   of the file — a server that is configured but not enabled never starts:
+   ```lua
+   vim.lsp.enable({
+     "html",
+     "tsgo",
+     -- ...
+     "your_new_server",
+   })
+   ```
+
+   For a server that is not in nvim-lspconfig's catalog, also pass `cmd`,
+   `filetypes`, and `root_markers` (see the `tsgo` block for an example).
 
 3. Restart Neovim
 
@@ -84,7 +107,10 @@ Mason will automatically install the new LSP server.
    }
    ```
 
-2. Ensure the formatter tool is installed via Mason by adding it to `lua/abeluzhenko/plugins/lsp/mason.lua`:
+2. Ensure the formatter tool is installed via Mason by adding it to the
+   **`mason_tool_installer.setup()`** list in
+   `lua/abeluzhenko/plugins/lsp/mason.lua` (line ~42 — not the
+   mason-lspconfig list above it):
    ```lua
    ensure_installed = {
      -- ... other tools ...
@@ -92,14 +118,25 @@ Mason will automatically install the new LSP server.
    }
    ```
 
+   A formatter that is not a Mason package has to be on `PATH` by other means.
+   Formatters listed together for one filetype are a fallback chain when
+   `stop_after_first = true` — e.g. web files try `oxfmt`, then `prettierd`,
+   then `prettier`. Custom invocation (like `oxfmt`, which does not read
+   stdin) goes in the `formatters = {}` table below `formatters_by_ft`.
+
 3. Restart Neovim
 
 ## Changing Theme
 
-Edit `lua/abeluzhenko/plugins/colorscheme.lua` to change the color scheme:
+Edit `lua/abeluzhenko/plugins/colorscheme.lua` to change the color scheme.
+nightfly is active; a fully configured tokyonight spec is commented out in the
+same file — swapping is a matter of commenting one block and uncommenting the
+other.
 
 1. Replace the plugin repository
 2. Update the colorscheme name in the config function
+3. Update `install.colorscheme` in `lua/abeluzhenko/lazy.lua`, which still
+   names `nightfly`
 
 Example:
 ```lua
