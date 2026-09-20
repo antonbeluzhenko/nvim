@@ -33,7 +33,6 @@ return {
         "lua_ls",
         "emmet_ls",
         "arduino_language_server",
-        "clangd",
       },
       -- auto-install configured servers (with lspconfig)
       automatic_installation = true, -- not the same as ensure_installed
@@ -41,10 +40,17 @@ return {
 
     mason_tool_installer.setup({
       ensure_installed = {
+        -- mason-lspconfig has no mapping for tsgo, so it is installed here
+        -- by its mason package name instead
+        "tsgo", -- typescript language server (lspconfig.lua runs it off PATH)
+        "oxfmt", -- js/ts formatter (conform's first choice)
         "prettierd", -- formatter (faster prettier)
         "prettier", -- formatter
         "stylua", -- lua formatter
         "eslint_d", -- js linter
+        "isort", -- python import sorter
+        "black", -- python formatter
+        "pylint", -- python linter
       },
     })
   end,

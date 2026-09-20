@@ -23,5 +23,3 @@ require("lazy").setup({ { import = "abeluzhenko.plugins" }, { import = "abeluzhe
     notify = false,
   },
 })
-
-require("copilot").setup({})

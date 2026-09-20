@@ -50,7 +50,16 @@ return {
       keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
 
       opts.desc = "Restart LSP"
-      keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+      -- nvim-lspconfig no longer ships :LspRestart; stop the buffer's clients
+      -- and re-edit so the enabled servers re-attach
+      keymap.set("n", "<leader>rs", function()
+        for _, c in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+          c:stop(true)
+        end
+        vim.defer_fn(function()
+          vim.cmd("edit")
+        end, 250)
+      end, opts)
     end
 
     -- used to enable autocompletion (assign to every lsp server config)
