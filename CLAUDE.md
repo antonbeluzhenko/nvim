@@ -29,7 +29,9 @@ Personal Neovim configuration that provides a modern IDE experience. Written ent
   Installed by Mason (`@typescript/native-preview`) via mason-tool-installer,
   so no manual step is needed.
 - **Python 3.10+** — required for Mason to build `isort`, `black`, and
-  `pylint`; the macOS system Python (3.9) is rejected.
+  `pylint`; the macOS system Python (3.9) is rejected. Install via
+  `brew install python3` (the unversioned formula — `python@3.x` does not put
+  `python3` on `PATH`).
 - **`deno`** — used by peek.nvim's build step (`deno task build:fast`) for
   markdown preview.
 - **`make`** — used by telescope-fzf-native's build step.

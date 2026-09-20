@@ -8,10 +8,17 @@
 - **Node.js / npm** — Mason installs most of the servers and tools as npm
   packages, and GitHub Copilot needs a Node runtime.
 - **Python 3.10+** — Mason needs it to install the Python tools (`isort`,
-  `black`, `pylint`). macOS ships 3.9, which Mason rejects; install a newer one
-  (`brew install python@3.12`) and make sure `python3 --version` reports 3.10+
-  in the shell that launches Neovim. Without it those three fail to install and
-  Python formatting/linting silently no-ops.
+  `black`, `pylint`). macOS ships 3.9, which Mason rejects. Install
+  Homebrew's:
+
+  ```bash
+  brew install python3
+  ```
+
+  Use the unversioned `python3` formula, **not** `python@3.x` — the versioned
+  formulae only install `python3.12`-style binaries and keep the plain
+  `python3` symlink inside their own `libexec/bin`, so `python3` on `PATH`
+  stays at the system 3.9. Verify with `python3 --version`.
 - **`tree-sitter` CLI** — nvim-treesitter's `main` branch compiles parsers from
   grammars on install, so the CLI must be installed and on Neovim's `PATH`:
 

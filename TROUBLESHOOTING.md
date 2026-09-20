@@ -50,10 +50,17 @@ versions (>=3.10.0). Found version: 3.9.6.
 ```
 
 Mason builds the Python tools in a venv and rejects the macOS system Python
-(3.9). Install a newer interpreter (`brew install python@3.12`) and confirm
-`python3 --version` reports 3.10+ in the shell that launches Neovim, then run
-`:MasonToolsUpdate`. Until then mason-tool-installer retries — and logs this
-error to `~/.local/state/nvim/mason.log` — on every startup.
+(3.9). Install Homebrew's `python3` formula — the unversioned one, since
+`brew install python@3.12` puts only `python3.12` on `PATH` and leaves
+`python3` pointing at the system 3.9:
+
+```bash
+brew install python3
+python3 --version   # must report 3.10+
+```
+
+Then run `:MasonToolsUpdate`. Until it is fixed, mason-tool-installer retries
+on every startup and logs this error to `~/.local/state/nvim/mason.log`.
 
 ### Verify LSP Server Installation
 
