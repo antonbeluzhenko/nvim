@@ -181,31 +181,6 @@ nvim --startuptime startup.log
 
 Then review `startup.log` to see what takes time.
 
-## Copilot Issues
-
-> Inline (ghost text) suggestions and the Copilot panel are **disabled by
-> design** in `plugins/copilot.lua`. Copilot shows up as a nvim-cmp completion
-> source via copilot-cmp — missing ghost text is not a bug.
-
-### Check Copilot Status
-
-```vim
-:Copilot status
-```
-
-### Re-authenticate Copilot
-
-```vim
-:Copilot auth
-```
-
-### Restart Copilot
-
-```vim
-:Copilot disable
-:Copilot enable
-```
-
 ## General Diagnostics
 
 ### Full Health Check
@@ -248,10 +223,3 @@ Ensure you're running Neovim 0.11+ (required by nvim-treesitter's `main` branch)
 
 1. Check nvim-cmp is loaded: `:Lazy`
 2. Verify LSP is attached: `:checkhealth vim.lsp`
-3. Check Copilot status: `:Copilot status`
-4. For missing Copilot entries specifically, confirm a `copilot` client is
-   running — copilot-cmp only registers its source on `InsertEnter`/`LspAttach`
-   once copilot.lua has attached:
-   ```vim
-   :lua =#vim.lsp.get_clients({ name = "copilot" })
-   ```

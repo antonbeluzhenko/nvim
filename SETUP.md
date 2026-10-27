@@ -6,7 +6,7 @@
   the `vim.lsp.config()` / `vim.lsp.enable()` API used in
   `lua/abeluzhenko/plugins/lsp/lspconfig.lua`.
 - **Node.js / npm** — Mason installs most of the servers and tools as npm
-  packages, and GitHub Copilot needs a Node runtime.
+  packages.
 - **Python 3.10+** — Mason needs it to install the Python tools (`isort`,
   `black`, `pylint`). macOS ships 3.9, which Mason rejects. Install
   Homebrew's:
@@ -30,8 +30,6 @@
   Verify with `tree-sitter --version`. Note: Homebrew's `tree-sitter` formula
   installs only the library, **not** the CLI binary.
 - **`make`** — telescope-fzf-native is built from source on install.
-- **`deno`** — peek.nvim (markdown preview) runs `deno task build:fast` on
-  install. Skip it if you do not need `:PeekOpen`.
 
 ## First Launch
 
@@ -53,14 +51,6 @@ mason-lspconfig has no mapping for it; `lspconfig.lua` runs it off `PATH`
 (Mason's `bin/` is on Neovim's `PATH`).
 
 ## Post-Install Steps
-
-### Authenticate GitHub Copilot
-
-```vim
-:Copilot auth
-```
-
-Follow the browser prompts to authenticate your GitHub account.
 
 ### Treesitter Parsers
 
@@ -98,8 +88,6 @@ After initial setup, verify everything is working:
    ```
 
 4. Test completion by opening a file and typing - you should see suggestions.
-   Copilot appears as a nvim-cmp source, not as inline ghost text (inline
-   suggestions and the panel are disabled in `plugins/copilot.lua`).
 
 5. Test formatting by editing a file and saving (conform.nvim formats on save).
    `:ConformInfo` shows which formatter will run for the current buffer.

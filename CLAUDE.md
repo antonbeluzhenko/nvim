@@ -12,7 +12,7 @@ Personal Neovim configuration that provides a modern IDE experience. Written ent
 - **LSP Management**: Mason (pinned to `^1.0.0`) + mason-lspconfig + nvim-lspconfig
 - **Formatter**: conform.nvim (oxfmt → prettierd → prettier for web files, stylua, isort/black)
 - **Linter**: nvim-lint (eslint_d, pylint)
-- **Completion**: nvim-cmp + LuaSnip + GitHub Copilot (via copilot.lua / copilot-cmp)
+- **Completion**: nvim-cmp + LuaSnip
 - **Fuzzy Finder**: Telescope (fzf-native, live-grep-args, ast-grep extensions)
 - **Syntax Highlighting**: Treesitter (`main` branch)
 - **Version Control**: Gitsigns + Diffview
@@ -32,21 +32,16 @@ Personal Neovim configuration that provides a modern IDE experience. Written ent
   `pylint`; the macOS system Python (3.9) is rejected. Install via
   `brew install python3` (the unversioned formula — `python@3.x` does not put
   `python3` on `PATH`).
-- **`deno`** — used by peek.nvim's build step (`deno task build:fast`) for
-  markdown preview.
 - **`make`** — used by telescope-fzf-native's build step.
 
 ### Key Features
 
 - LSP support: TypeScript/JavaScript (tsgo), Lua, HTML, CSS, Emmet, Arduino
-- GitHub Copilot AI-assisted coding (completion source, not inline ghost text)
 - Auto-formatting on save (conform.nvim)
 - Fuzzy file finding, live grep, and live grep with args
 - Git integration with visual diffs
 - Auto-completion with snippets
 - Treesitter text objects for select / swap / move
-- Markdown preview (peek.nvim)
-- Built-in vim trainers (vim-be-good, nvim-training)
 - Space as leader key
 
 ---
@@ -69,9 +64,9 @@ nvim/
 │   │   ├── keymaps.lua         # Custom key mappings
 │   │   └── options.lua         # Editor settings
 │   │
-│   └── plugins/                # Plugin configs (one per file, 32 files)
+│   └── plugins/                # Plugin configs (one per file, 26 files)
 │       ├── init.lua            # Basic utilities (plenary, ReplaceWithRegister)
-│       ├── [31 more].lua       # Individual configs
+│       ├── [25 more].lua       # Individual configs
 │       │
 │       └── lsp/                # Language Server configs
 │           ├── mason.lua       # LSP + tool installer
@@ -124,7 +119,7 @@ in `on_attach`.
 
 #### `lua/abeluzhenko/plugins/`
 
-32 plugin configuration files organized by purpose:
+26 plugin configuration files organized by purpose:
 
 **UI & Navigation**: nvim-tree, telescope (+ ast-grep, live-grep-args), bufferline, lualine, alpha-nvim, which-key, incline-nvim, vim-tmux-navigator
 
@@ -138,8 +133,6 @@ in `on_attach`.
 > See `lua/abeluzhenko/plugins/vim-tmux-navigator.lua`.
 
 **Editing**: nvim-cmp (+ cmp-buffer, cmp-path, LuaSnip, friendly-snippets, lspkind), nvim-surround, inc-rename-nvim, vim-ReplaceWithRegister
-
-**AI**: copilot.lua (inline suggestion + panel disabled), copilot-cmp (Copilot as a cmp source), copilot-status.nvim
 
 **Code Intelligence**: nvim-treesitter (`main` branch, + nvim-ts-autotag), nvim-treesitter-text-objects, nvm-treesitter-context (filename typo is intentional/harmless), lsp-signature
 
@@ -171,7 +164,7 @@ installed automatically.
 
 **Visual**: colorscheme.lua (nightfly active; tokyonight block commented out), colorizer.lua, nvim-web-devicons (custom GraphQL icon)
 
-**Workflow & Misc**: vim-maximizer, peek-nvim (markdown preview), vim-be-good, nvim-training
+**Workflow & Misc**: vim-maximizer
 
 Each plugin file returns a lazy.nvim spec with repository, dependencies, config, and keymaps.
 
@@ -213,7 +206,7 @@ Plugin manager bootstrap:
 3. Sets install colorscheme to nightfly; enables the update checker and
    change detection, both with notifications off
 
-Nothing is `require`d eagerly here — every plugin, Copilot included, is left to
+Nothing is `require`d eagerly here — every plugin is left to
 its own lazy.nvim spec so its `opts` are the ones that take effect.
 
 #### `after/queries/ecma/`

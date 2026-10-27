@@ -21,6 +21,8 @@ return {
 
       require("lsp_signature").on_attach(signature_setup, bufnr)
 
+      require("lsp-file-operations").setup({ logging = false })
+
       -- set keybinds
       opts.desc = "Show LSP references"
       keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
