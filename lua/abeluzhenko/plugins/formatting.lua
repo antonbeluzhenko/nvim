@@ -20,6 +20,7 @@ return {
         graphql = { "oxfmt", "prettierd", "prettier", stop_after_first = true },
         lua = { "stylua" },
         python = { "isort", "black" },
+        rust = { "rustfmt" },
       },
       formatters = {
         oxfmt = {

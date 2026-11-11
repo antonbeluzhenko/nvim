@@ -33,10 +33,14 @@ Personal Neovim configuration that provides a modern IDE experience. Written ent
   `brew install python3` (the unversioned formula — `python@3.x` does not put
   `python3` on `PATH`).
 - **`make`** — used by telescope-fzf-native's build step.
+- **`rust-analyzer`** + **`rustfmt`** — resolved off `PATH`, deliberately not
+  via Mason (rustaceanvim advises against Mason's copy, which can mismatch the
+  project toolchain). Install with `rustup component add rust-analyzer` or
+  `brew install rust-analyzer`.
 
 ### Key Features
 
-- LSP support: TypeScript/JavaScript (tsgo), Lua, HTML, CSS, Emmet, Arduino
+- LSP support: TypeScript/JavaScript (tsgo), Rust (rustaceanvim), Lua, HTML, CSS, Emmet, Arduino
 - Auto-formatting on save (conform.nvim)
 - Fuzzy file finding, live grep, and live grep with args
 - Git integration with visual diffs
@@ -64,9 +68,9 @@ nvim/
 │   │   ├── keymaps.lua         # Custom key mappings
 │   │   └── options.lua         # Editor settings
 │   │
-│   └── plugins/                # Plugin configs (one per file, 26 files)
+│   └── plugins/                # Plugin configs (one per file, 28 files)
 │       ├── init.lua            # Basic utilities (plenary, ReplaceWithRegister)
-│       ├── [25 more].lua       # Individual configs
+│       ├── [27 more].lua       # Individual configs
 │       │
 │       └── lsp/                # Language Server configs
 │           ├── mason.lua       # LSP + tool installer
@@ -119,7 +123,7 @@ in `on_attach`.
 
 #### `lua/abeluzhenko/plugins/`
 
-26 plugin configuration files organized by purpose:
+28 plugin configuration files organized by purpose:
 
 **UI & Navigation**: nvim-tree, telescope (+ ast-grep, live-grep-args), bufferline, lualine, alpha-nvim, which-key, incline-nvim, vim-tmux-navigator
 
@@ -152,6 +156,13 @@ in `on_attach`.
 > - `incremental_selection` was removed with no built-in replacement.
 >
 > See `lua/abeluzhenko/plugins/nvim-treesitter.lua`.
+
+**Rust**: rustaceanvim.lua (owns the rust-analyzer client; configured via
+`vim.lsp.config("rust-analyzer", ...)` in `lspconfig.lua` and intentionally
+absent from `vim.lsp.enable()`), crates.lua (Cargo.toml in-process LSP).
+Rust buffers override `<leader>ca`/`K` with `:RustLsp` versions and add
+`<leader>r[e|d|r|t|m|c]` (explainError, renderDiagnostic, runnables,
+testables, expandMacro, openCargo). rust-analyzer runs clippy on save.
 
 **Formatting & Linting**: formatting.lua (conform.nvim), linting.lua (nvim-lint).
 These are the only formatting/diagnostic providers — there is deliberately no

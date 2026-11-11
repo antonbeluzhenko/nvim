@@ -138,6 +138,66 @@ return {
       on_attach = on_attach,
     })
 
+    -- configure rust-analyzer. rustaceanvim reads this config and starts the
+    -- client itself, so it is deliberately NOT in vim.lsp.enable() below.
+    vim.lsp.config("rust-analyzer", {
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        -- override the generic maps with rustaceanvim's richer versions
+        opts.buffer = bufnr
+
+        opts.desc = "Rust code actions (grouped)"
+        keymap.set({ "n", "v" }, "<leader>ca", function()
+          vim.cmd.RustLsp("codeAction")
+        end, opts)
+
+        opts.desc = "Rust hover actions"
+        keymap.set("n", "K", function()
+          vim.cmd.RustLsp({ "hover", "actions" })
+        end, opts)
+
+        opts.desc = "Explain Rust error"
+        keymap.set("n", "<leader>re", function()
+          vim.cmd.RustLsp("explainError")
+        end, opts)
+
+        opts.desc = "Render Rust diagnostic"
+        keymap.set("n", "<leader>rd", function()
+          vim.cmd.RustLsp("renderDiagnostic")
+        end, opts)
+
+        opts.desc = "Rust runnables"
+        keymap.set("n", "<leader>rr", function()
+          vim.cmd.RustLsp("runnables")
+        end, opts)
+
+        opts.desc = "Rust testables"
+        keymap.set("n", "<leader>rt", function()
+          vim.cmd.RustLsp("testables")
+        end, opts)
+
+        opts.desc = "Expand Rust macro"
+        keymap.set("n", "<leader>rm", function()
+          vim.cmd.RustLsp("expandMacro")
+        end, opts)
+
+        opts.desc = "Open Cargo.toml"
+        keymap.set("n", "<leader>rc", function()
+          vim.cmd.RustLsp("openCargo")
+        end, opts)
+      end,
+      settings = {
+        ["rust-analyzer"] = {
+          -- run clippy instead of `cargo check` on save
+          check = { command = "clippy" },
+          cargo = { allFeatures = true },
+          procMacro = { enable = true },
+        },
+      },
+    })
+
     -- Enable all configured LSP servers
     vim.lsp.enable({
       "html",
